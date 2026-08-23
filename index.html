@@ -1,0 +1,1001 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07090f">
+<title>IRON DIET · PROGRESS</title>
+
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="IRON DIET">
+
+<style>
+:root{--bg:#07090f;--card:#131824;--line:#303747;--text:#f5f7ff;--muted:#929bad;--red:#ff244c;--orange:#ff6a22;--gold:#ffd34d;--cyan:#4bdcff;--green:#42ef93}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:radial-gradient(circle at 12% 0,rgba(255,40,68,.2),transparent 29%),linear-gradient(#090b12,#05060a);color:var(--text);font-family:Arial,"Noto Sans KR",sans-serif;min-height:100vh}
+button,input{font:inherit}
+.app{max-width:520px;margin:auto;padding:18px 15px 100px}
+.screen{display:none}.screen.active{display:block}
+.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}.eyebrow{font-size:11px;letter-spacing:.25em;color:var(--orange);font-weight:900}.header h1{margin:6px 0 4px;font-size:30px;letter-spacing:-.05em}.sub{color:var(--muted);font-size:12px}.rank{padding:10px 14px;border:1px solid #6c5322;background:#1e170b;border-radius:16px;color:var(--gold);font-size:24px;font-weight:1000;box-shadow:0 0 22px rgba(255,200,60,.16)}
+.card{background:linear-gradient(145deg,#171c29,#0c0f17);border:1px solid #303747;border-radius:20px;padding:16px;box-shadow:0 16px 36px rgba(0,0,0,.35);margin-bottom:13px}
+.moneyline{display:flex;justify-content:space-between;align-items:end}.moneyline b{font-size:31px;color:var(--gold)}.moneyline small{color:var(--muted)}
+.bar{height:13px;background:#05060a;border:1px solid #333a4c;border-radius:99px;overflow:hidden;margin-top:12px}.fill{height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--orange),var(--gold));box-shadow:0 0 18px var(--orange);transition:.4s}
+.vault{display:grid;grid-template-columns:repeat(10,1fr);gap:7px;margin-top:14px}.coin{aspect-ratio:1;border-radius:50%;background:#121722;border:1px solid #2d3444}.coin.on{background:radial-gradient(circle at 35% 28%,#fff5a7,#ffbf23 42%,#d36a00 75%);box-shadow:0 0 13px rgba(255,190,35,.8);transform:scale(1.05)}
+.selector{display:grid;grid-template-columns:1fr 1fr;gap:9px}.selector button{padding:12px;border-radius:14px;border:1px solid #343b4c;background:#10141e;color:#9ca5b8;font-weight:900}.selector button.active{color:white;border-color:#b34b25;background:linear-gradient(145deg,#3a1c12,#171119);box-shadow:0 0 20px rgba(255,90,35,.2)}
+.titleline{display:flex;justify-content:space-between;align-items:end;margin:17px 2px 9px}.titleline h2{margin:0;font-size:18px}.titleline span{font-size:11px;color:var(--muted)}
+.missions{display:grid;gap:10px}.mission{padding:14px;border:1px solid #2c3343;border-radius:17px;background:linear-gradient(145deg,#151a26,#0d1018);display:grid;grid-template-columns:48px 1fr auto;gap:11px;align-items:center}.mission.done{border-color:#3fa366;background:linear-gradient(145deg,rgba(30,115,70,.42),#0c1512)}.step{width:48px;height:48px;border-radius:14px;background:#080a10;border:1px solid #343b4b;display:grid;place-items:center;font-weight:1000;font-size:19px}.mission.done .step{background:var(--green);color:#07120b;box-shadow:0 0 24px rgba(66,239,147,.5)}.mission b{font-size:15px}.mission small{display:block;color:var(--muted);margin-top:4px;font-size:11px}.reward{color:var(--gold);font-size:12px;font-weight:900}.clear{grid-column:1/-1;border:0;border-radius:12px;padding:11px;color:white;font-weight:1000;background:linear-gradient(90deg,#8b1530,#ff6030)}.mission.done .clear{background:#183729;color:#75f0aa}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(520px,100%);display:grid;grid-template-columns:repeat(4,1fr);padding:9px 8px calc(9px + env(safe-area-inset-bottom));background:rgba(6,8,13,.94);backdrop-filter:blur(14px);border-top:1px solid #2a3040;z-index:30}.nav button{border:0;background:none;color:#747d90;font-size:11px;font-weight:900;padding:9px 2px}.nav button.active{color:var(--orange)}
+.statsgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{text-align:center;background:#0b0e15;border:1px solid #2a3141;border-radius:15px;padding:13px 5px}.stat strong{display:block;color:var(--cyan);font-size:19px}.stat small{color:var(--muted);font-size:10px}
+canvas{width:100%;height:180px;display:block}
+.calendar-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.calendar-head button{background:#111621;color:white;border:1px solid #333b4d;border-radius:10px;padding:7px 11px}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.dow{text-align:center;color:#7f899c;font-size:10px;padding:4px}.day{aspect-ratio:1;border:1px solid #283041;background:#0c1018;border-radius:11px;color:#cbd1de;font-size:12px;position:relative}.day.today{outline:2px solid var(--orange)}.day.partial:after,.day.perfect:after{content:"";position:absolute;bottom:5px;left:50%;transform:translateX(-50%);width:6px;height:6px;border-radius:50%}.day.partial:after{background:var(--cyan)}.day.perfect:after{background:var(--gold);box-shadow:0 0 8px var(--gold)}.day.empty{visibility:hidden}
+.history{margin-top:12px;font-size:12px;color:#cbd1de;line-height:1.6}
+.weight-row{display:grid;grid-template-columns:1fr auto;gap:8px}.weight-row input,.settings input{width:100%;padding:12px;border-radius:12px;border:1px solid #343c4d;background:#0a0d14;color:white}.primary{border:0;border-radius:12px;padding:12px 14px;background:linear-gradient(90deg,#a51c37,#ff6530);color:white;font-weight:900}.data-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.data-grid button{padding:12px;border-radius:12px;border:1px solid #384156;background:#121824;color:white;font-weight:900}.danger{width:100%;margin-top:10px;padding:12px;border-radius:12px;border:1px solid #7e3040;background:#2a1018;color:#ff8da4;font-weight:900}
+.overlay{position:fixed;inset:0;display:grid;place-items:center;pointer-events:none;opacity:0;z-index:100;background:radial-gradient(circle,rgba(255,80,25,.22),rgba(0,0,0,.72) 68%)}.overlay.show{animation:fade 1.35s ease-out}.overlay.perfect{background:radial-gradient(circle,rgba(255,220,70,.35),rgba(255,65,20,.25) 30%,rgba(0,0,0,.76) 72%)}.fxtext{text-align:center;transform:skew(-7deg)}.fxtext .k{font-size:14px;letter-spacing:.35em;color:#ffe073;font-weight:1000}.fxtext .main{font-size:clamp(52px,15vw,88px);line-height:.9;font-weight:1000;font-style:italic;color:white;text-shadow:0 0 7px #fff,0 0 20px #ffbd35,0 0 45px #ff381f,0 0 90px #b00020}.fxtext .gold{font-size:27px;color:#ffe271;font-weight:1000;margin-top:13px;text-shadow:0 0 18px #ff8a1f}.slash,.shock,.spark{position:absolute}.slash{width:150%;height:9px;background:white;box-shadow:0 0 20px #ff1748,0 0 45px #ff5b22;transform:rotate(-18deg)}.slash.s2{transform:rotate(22deg)}.shock{width:90px;height:90px;border:7px solid white;border-radius:50%;box-shadow:0 0 25px #ff5a22,0 0 55px #ff1748}.overlay.show .shock{animation:shock 1s ease-out}.spark{width:7px;height:30px;background:linear-gradient(#fff,#ffcc39,#ff2d33);box-shadow:0 0 10px #ff5b22}
+body.shake{animation:shake .55s linear}.flash{position:fixed;inset:0;background:white;opacity:0;pointer-events:none;z-index:99}.flash.show{animation:flash .55s}
+@keyframes fade{0%{opacity:0;transform:scale(.5)}12%{opacity:1;transform:scale(1.14)}45%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.35)}}@keyframes shock{from{transform:scale(.1);opacity:1}to{transform:scale(8);opacity:0}}@keyframes shake{0%,100%{transform:none}15%{transform:translate(-9px,4px) rotate(-.7deg)}30%{transform:translate(8px,-5px) rotate(.7deg)}45%{transform:translate(-6px,-3px)}60%{transform:translate(5px,4px)}75%{transform:translate(-3px,2px)}}@keyframes flash{0%{opacity:0}12%{opacity:1}22%{opacity:.05}34%{opacity:.75}100%{opacity:0}}
+
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.78);display:none;align-items:flex-end;z-index:200}
+.modal.show{display:flex}
+.modal-sheet{width:min(520px,100%);margin:auto;background:linear-gradient(145deg,#171c29,#0b0e15);border:1px solid #3a4254;border-radius:24px 24px 0 0;padding:18px 15px calc(22px + env(safe-area-inset-bottom));max-height:88vh;overflow:auto;box-shadow:0 -20px 60px rgba(0,0,0,.55)}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.modal-head h3{margin:0;font-size:20px}.closex{width:38px;height:38px;border-radius:12px;border:1px solid #394153;background:#111621;color:white;font-size:21px}
+.edit-list{display:grid;gap:9px;margin-top:12px}.edit-item{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:center;padding:12px;border:1px solid #2d3546;border-radius:14px;background:#0d1119}.edit-item input{width:24px;height:24px;accent-color:#42ef93}.edit-item b{font-size:14px}.edit-item small{display:block;color:#8993a6;margin-top:3px;font-size:10px}
+.save-past{width:100%;margin-top:14px;border:0;border-radius:13px;padding:13px;background:linear-gradient(90deg,#9b1833,#ff6330);color:white;font-weight:1000}
+
+
+.update-banner{position:fixed;left:50%;top:12px;transform:translateX(-50%);z-index:500;width:min(480px,calc(100% - 24px));display:none;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-radius:14px;background:#171d28;border:1px solid #45506a;box-shadow:0 14px 40px rgba(0,0,0,.5)}
+.update-banner.show{display:flex}.update-banner b{font-size:13px}.update-banner button{border:0;border-radius:10px;padding:9px 12px;background:linear-gradient(90deg,#a31b36,#ff6330);color:white;font-weight:900}
+.install-card{border:1px solid #3b455d;background:linear-gradient(145deg,#151b27,#0c1018);border-radius:16px;padding:14px;margin-bottom:12px}
+.install-card button{width:100%;border:0;border-radius:12px;padding:12px;background:linear-gradient(90deg,#1f78ff,#5a45ff);color:white;font-weight:900}
+
+.editor-card{border:1px solid #3a4357;background:linear-gradient(145deg,#151b27,#0c1018);border-radius:18px;padding:14px;margin-bottom:12px}
+.editor-row{display:grid;grid-template-columns:1fr 92px 42px;gap:7px;margin-top:8px}
+.editor-row input{width:100%;padding:10px;border-radius:10px;border:1px solid #343d50;background:#090d14;color:white}
+.editor-row button{border:1px solid #733044;background:#2b1119;color:#ff93aa;border-radius:10px;font-weight:900}
+.editor-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.editor-actions button{padding:11px;border-radius:11px;border:1px solid #3b455a;background:#121824;color:white;font-weight:900}
+.editor-actions .saveedit{background:linear-gradient(90deg,#9e1935,#ff6330);border:0}
+.settings-label{display:block;margin:10px 0 6px;color:#cfd5e2;font-size:12px}
+
+.judge-card{border:1px solid #394258;background:linear-gradient(145deg,#151b27,#0b0f17);border-radius:18px;padding:14px;margin-bottom:12px}
+.judge-card.good{border-color:#2f9b63;box-shadow:0 0 24px rgba(66,239,147,.10)}
+.judge-card.bad{border-color:#9d3148;box-shadow:0 0 24px rgba(255,36,76,.12)}
+.judge-title{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.judge-title strong{font-size:20px}.judge-title span{font-size:12px;font-weight:900}
+.good .judge-title span{color:#42ef93}.bad .judge-title span{color:#ff718d}
+.judge-msg{margin-top:8px;font-size:12px;line-height:1.55;color:#b5bdcc}
+.metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+.metric{background:#090d14;border:1px solid #2b3344;border-radius:13px;padding:11px}
+.metric b{display:block;font-size:19px;color:#4bdcff}.metric small{color:#8f98aa;font-size:10px}
+.penalty{color:#ff718d!important}.bonus{color:#42ef93!important}
+.chart-note{margin:8px 0 0;font-size:11px;color:#8e98aa;line-height:1.45}
+.rule-box{border:1px solid #3a4357;background:#0c1119;border-radius:14px;padding:12px;margin-top:12px}
+.rule-box label{display:block;font-size:11px;color:#bfc7d6;margin:9px 0 5px}
+.rule-box input{width:100%;padding:10px;border-radius:10px;border:1px solid #343d50;background:#090d14;color:white}
+.toggle-row{display:flex;justify-content:space-between;align-items:center;margin-top:10px;color:#cfd5e2;font-size:12px}
+.toggle-row input{width:24px;height:24px;accent-color:#ff6030}
+
+.day.rate100{background:linear-gradient(145deg,#1d9f62,#0f5d3a);border-color:#49e99a;color:white;box-shadow:0 0 14px rgba(66,239,147,.35)}
+.day.rate80{background:linear-gradient(145deg,#1d79d8,#164c91);border-color:#55a9ff;color:white;box-shadow:0 0 12px rgba(75,160,255,.28)}
+.day.rate50{background:linear-gradient(145deg,#c99516,#7a5d13);border-color:#ffd34d;color:white;box-shadow:0 0 10px rgba(255,211,77,.23)}
+.day.rate30{background:linear-gradient(145deg,#5c6472,#363d49);border-color:#828b9c;color:white}
+.day.rate1{background:linear-gradient(145deg,#8d263b,#4d1624);border-color:#ff6680;color:white;box-shadow:0 0 10px rgba(255,36,76,.2)}
+.calendar-legend{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:12px}
+.legend-item{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:9px;color:#929bad;text-align:center}
+.legend-swatch{width:100%;height:9px;border-radius:99px;border:1px solid #333}
+.legend-swatch.green{background:#1d9f62}.legend-swatch.blue{background:#1d79d8}.legend-swatch.yellow{background:#c99516}.legend-swatch.gray{background:#5c6472}.legend-swatch.red{background:#8d263b}
+
+
+.mission.failed{border-color:#a3344d;background:linear-gradient(145deg,rgba(120,25,48,.46),#180b11)}
+.mission.failed .step{background:#a72443;color:white;border-color:#ff6680;box-shadow:0 0 22px rgba(255,36,76,.38)}
+.mission-actions{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:2px}
+.success-btn,.fail-btn{border:0;border-radius:12px;padding:11px;color:white;font-weight:1000}
+.success-btn{background:linear-gradient(90deg,#137b49,#42d786)}
+.fail-btn{background:linear-gradient(90deg,#87152f,#ff3b5e)}
+.mission.done .success-btn{box-shadow:0 0 18px rgba(66,239,147,.28);outline:2px solid #63f1a6}
+.mission.failed .fail-btn{box-shadow:0 0 18px rgba(255,36,76,.3);outline:2px solid #ff7890}
+.fail-reward{color:#ff718d!important}
+.fail-overlay{position:fixed;inset:0;display:grid;place-items:center;pointer-events:none;opacity:0;z-index:110;background:radial-gradient(circle,rgba(255,20,55,.3),rgba(0,0,0,.82) 70%)}
+.fail-overlay.show{animation:failFade 1.15s ease-out}
+.fail-main{font-size:clamp(46px,14vw,80px);font-weight:1000;font-style:italic;color:white;text-shadow:0 0 8px #fff,0 0 24px #ff244c,0 0 60px #84001d;transform:skew(-8deg);text-align:center}
+.fail-main small{display:block;font-size:22px;color:#ff718d;margin-top:12px}
+@keyframes failFade{0%{opacity:0;transform:scale(.55)}15%{opacity:1;transform:scale(1.12)}55%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.3)}}
+.edit-status{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px}
+.edit-status button{padding:9px 5px;border-radius:9px;border:1px solid #384154;background:#111722;color:#aeb7c8;font-size:11px;font-weight:900}
+.edit-status button.on-success{background:#174e35;color:#65f0a5;border-color:#42d786}
+.edit-status button.on-fail{background:#541525;color:#ff7890;border-color:#ff3b5e}
+.bank-breakdown{margin-top:9px;font-size:10px;color:#9aa3b5;line-height:1.5}
+
+.glucose-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.glucose-box{background:#0b0f17;border:1px solid #30394b;border-radius:14px;padding:11px}
+.glucose-box label{display:block;color:#aeb7c7;font-size:11px;margin-bottom:6px}
+.glucose-box input{width:100%;padding:11px;border-radius:10px;border:1px solid #354055;background:#080c13;color:white;font-size:17px;font-weight:900}
+.glucose-current{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:11px 0}
+.glucose-value{background:#0a0e15;border:1px solid #2f394b;border-radius:13px;padding:11px;text-align:center}
+.glucose-value strong{display:block;font-size:21px;color:#4bdcff}
+.glucose-value small{font-size:10px;color:#8f98aa}
+.glucose-history{font-size:10px;color:#8f98aa;line-height:1.55;margin-top:8px}
+
+.range-tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:4px 0 13px}
+.range-tabs button{padding:9px 4px;border-radius:10px;border:1px solid #333c50;background:#0d121b;color:#7f899c;font-size:10px;font-weight:1000}
+.range-tabs button.active{background:linear-gradient(145deg,#26365b,#121a2c);border-color:#5975b7;color:white;box-shadow:0 0 15px rgba(70,120,255,.18)}
+.range-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:9px 0 12px}
+.range-summary>div{background:#090d14;border:1px solid #2c3445;border-radius:12px;padding:9px;text-align:center}
+.range-summary b{display:block;font-size:15px;color:#4bdcff}.range-summary small{font-size:9px;color:#8993a6}
+
+.progress-hero{position:relative;overflow:hidden;border:1px solid #3b455b;background:radial-gradient(circle at 82% 6%,rgba(255,91,42,.18),transparent 34%),linear-gradient(145deg,#171d2a,#090d14);border-radius:22px;padding:17px;margin-bottom:13px;box-shadow:0 16px 38px rgba(0,0,0,.35)}
+.progress-hero:after{content:"";position:absolute;width:170px;height:170px;right:-55px;bottom:-90px;border-radius:50%;background:radial-gradient(circle,rgba(75,220,255,.16),transparent 68%)}
+.rank-row{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}.rank-letter{font-size:62px;line-height:.9;font-weight:1000;font-style:italic;letter-spacing:-4px;text-shadow:0 0 22px rgba(255,110,45,.35)}
+.rank-meta{text-align:right;position:relative;z-index:1}.rank-meta b{display:block;font-size:28px}.rank-meta small{color:#8f99ab;font-size:10px}.rank-bar{height:12px;border-radius:99px;background:#070a10;border:1px solid #30394b;overflow:hidden;margin:14px 0 8px}.rank-fill{height:100%;width:0;background:linear-gradient(90deg,#ff244c,#ff7928,#ffd34d);box-shadow:0 0 18px rgba(255,105,35,.45);transition:.4s}
+.streak-row{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:11px}.streak-box{background:#090d14;border:1px solid #2d3546;border-radius:13px;padding:10px 4px;text-align:center}.streak-box b{display:block;font-size:19px}.streak-box small{font-size:9px;color:#8993a6}
+.week-result{border:1px solid #3a4357;background:linear-gradient(145deg,#121823,#090d14);border-radius:18px;padding:14px;margin-bottom:12px}.week-result h3{margin:0 0 8px;font-size:14px}.result-line{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #252d3b;font-size:12px}.result-line:last-of-type{border-bottom:0}.result-line b.up{color:#42ef93}.result-line b.down{color:#ff718d}.result-line b.neutral{color:#4bdcff}
+.weakness{margin-top:10px;padding:10px;border-radius:12px;background:#160d12;border:1px solid #542132;color:#ff9aae;font-size:11px;line-height:1.5}.badge-strip{display:flex;gap:7px;overflow:auto;padding-bottom:2px}.badge{flex:0 0 auto;border:1px solid #3b4559;background:#101621;border-radius:12px;padding:9px 11px;font-size:10px;font-weight:900;color:#9da7b9}.badge.unlocked{border-color:#b88b2c;color:#ffd86a;background:#21190a;box-shadow:0 0 12px rgba(255,210,70,.12)}
+.mission .reward{display:none!important}.moneyline,.bar,#bankBreakdown,#vault{display:none!important}.money-card-hidden{display:none!important}
+
+.long-summary{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin:0 0 12px}.long-summary>div{background:#090d14;border:1px solid #2c3445;border-radius:12px;padding:10px}.long-summary small{display:block;color:#8993a6;font-size:9px;margin-bottom:4px}.long-summary b{font-size:13px;color:#dce4ef}.all-note{font-size:10px;color:#8993a6;line-height:1.5;margin:-4px 0 12px}
+.full-records{border:1px solid #364056;background:#0c1119;border-radius:18px;padding:14px;margin-top:12px}
+.full-records-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
+.full-records-head h3{margin:0;font-size:16px}
+.record-tools{display:grid;grid-template-columns:1fr auto;gap:7px;margin-bottom:9px}
+.record-tools input{width:100%;padding:10px;border-radius:10px;border:1px solid #343d50;background:#090d14;color:white}
+.record-tools button{border:0;border-radius:10px;padding:10px 12px;background:linear-gradient(90deg,#26365b,#3f5e9e);color:white;font-weight:900}
+.record-list{max-height:540px;overflow:auto;border-top:1px solid #2a3243}
+.record-row{display:grid;grid-template-columns:92px 1fr 1fr 1fr;gap:5px;align-items:center;padding:10px 2px;border-bottom:1px solid #242b39;font-size:11px}
+.record-row.head{position:sticky;top:0;background:#0c1119;z-index:2;color:#8f99aa;font-weight:900}
+.record-row b{font-size:11px;color:#e8edf5}.record-row span{text-align:center;color:#c4ccda}
+.record-row .date{text-align:left;color:#9fa9b9}
+.record-empty{padding:22px;text-align:center;color:#80899a;font-size:12px}
+.record-count{font-size:10px;color:#8f99aa}
+
+
+.records-toggle{width:100%;margin-top:12px;padding:13px 14px;border-radius:14px;border:1px solid #3a455a;background:linear-gradient(145deg,#151b27,#0b1018);color:#fff;font-weight:1000;display:flex;justify-content:space-between;align-items:center}
+.records-toggle span{color:#8f99aa;font-size:11px}
+.full-records.collapsed{display:none}
+</style>
+</head>
+<body>
+
+<div id="updateBanner" class="update-banner"><b>새 버전이 준비되었습니다.</b><button onclick="applyUpdate()">지금 업데이트</button></div>
+<div class="app">
+<section id="mission" class="screen active">
+<div class="header"><div><div class="eyebrow">IRON DIET · PROGRESS</div><h1>오늘의 전투</h1><div id="dateText" class="sub"></div></div><div class="rank" id="rank">D</div></div>
+<div class="progress-hero"><div class="rank-row"><div><div class="eyebrow">IRON RANK</div><div id="homeRank" class="rank-letter">D</div></div><div class="rank-meta"><small>THIS WEEK</small><b id="homeWeekRate">0%</b><small id="homeRankMsg">기록을 시작하세요</small></div></div><div class="rank-bar"><div id="homeRankFill" class="rank-fill"></div></div><div class="streak-row"><div class="streak-box"><b id="homeStreak">0</b><small>DAY STREAK</small></div><div class="streak-box"><b id="homePerfectWeeks">0</b><small>PERFECT WEEK</small></div><div class="streak-box"><b id="homeTotalDays">0</b><small>RECORDED DAYS</small></div></div></div>
+<div class="selector"><button id="weekday" onclick="chooseMode('weekday')">평일 식단</button><button id="weekend" onclick="chooseMode('weekend')">주말 식단</button></div>
+<div class="titleline"><h2 id="missionTitle"></h2><span id="countText"></span></div><div id="missions" class="missions"></div>
+</section>
+
+<section id="record" class="screen">
+<div class="header"><div><div class="eyebrow">BATTLE LOG</div><h1>기록 달력</h1><div class="sub">날짜별 체크 기록이 계속 누적됩니다.</div></div></div>
+<div class="card"><div class="calendar-head"><button onclick="moveMonth(-1)">‹</button><b id="monthTitle"></b><button onclick="moveMonth(1)">›</button></div><div id="calendar" class="calendar"></div>
+<div class="calendar-legend">
+ <div class="legend-item"><span class="legend-swatch green"></span><span>100%</span></div>
+ <div class="legend-item"><span class="legend-swatch blue"></span><span>80% 이상</span></div>
+ <div class="legend-item"><span class="legend-swatch yellow"></span><span>50% 이상</span></div>
+ <div class="legend-item"><span class="legend-swatch gray"></span><span>30% 이상</span></div>
+ <div class="legend-item"><span class="legend-swatch red"></span><span>30% 미만</span></div>
+</div>
+<div id="history" class="history">날짜를 누르면 상세 기록이 표시됩니다.</div>
+<button id="recordsToggleBtn" class="records-toggle" onclick="toggleFullRecords()">
+  <b>전체 건강기록 보기</b><span id="recordsToggleText">펼치기 ▼</span>
+</button>
+<div id="fullRecordsPanel" class="full-records collapsed">
+  <div class="full-records-head">
+    <div><h3>전체 건강기록</h3><div id="fullRecordCount" class="record-count">0건</div></div>
+  </div>
+  <div class="record-tools">
+    <input id="recordSearch" type="text" placeholder="날짜 검색 예: 2026-08 또는 08-18" oninput="renderFullRecords()">
+    <button onclick="exportHealthCSV()">CSV 저장</button>
+  </div>
+  <div id="fullRecordList" class="record-list"></div>
+</div>
+</div>
+<div class="statsgrid"><div class="stat"><strong id="streak">0일</strong><small>연속 도전</small></div><div class="stat"><strong id="perfects">0회</strong><small>퍼펙트</small></div><div class="stat"><strong id="total">0개</strong><small>누적 미션</small></div></div>
+</section>
+
+<section id="stats" class="screen">
+<div class="header"><div><div class="eyebrow">PROGRESS</div><h1>성과 추이</h1><div class="sub">기간을 바꾸면 모든 그래프가 같은 범위로 압축되어 표시됩니다.</div></div></div>
+<div class="range-tabs">
+ <button id="rangeWeek" onclick="setChartRange('week')">WEEK</button>
+ <button id="rangeMonth" onclick="setChartRange('month')">MONTH</button>
+ <button id="rangeQuarter" onclick="setChartRange('quarter')">QUARTER</button>
+ <button id="rangeYear" onclick="setChartRange('year')">YEAR</button>
+ <button id="rangeAll" class="active" onclick="setChartRange('all')">ALL</button>
+</div>
+<div class="range-summary">
+ <div><b id="rangeMissionAvg">0%</b><small>미션 평균</small></div>
+ <div><b id="rangeWeightChange">-</b><small>체중 변화</small></div>
+ <div><b id="rangeGlucoseAvg">-</b><small>공복 평균</small></div>
+</div>
+<div class="long-summary"><div><small>체중 최초 → 현재</small><b id="weightLifetime">-</b></div><div><small>공복 혈당 최초 → 현재</small><b id="fastingLifetime">-</b></div><div><small>식후 2시간 최초 → 현재</small><b id="postLifetime">-</b></div><div><small>전체 기록 기간</small><b id="historySpan">-</b></div></div><div class="all-note">ALL에서는 최초 기록부터 현재까지 모든 데이터를 유지합니다. 기록이 많아져도 날짜 눈금만 자동으로 줄여 표시합니다.</div>
+
+<div class="week-result"><h3>WEEK RESULT · 지난주 대비</h3><div class="result-line"><span>미션 성공률</span><b id="resultMission" class="neutral">-</b></div><div class="result-line"><span>체중 평균</span><b id="resultWeight" class="neutral">-</b></div><div class="result-line"><span>공복 혈당 평균</span><b id="resultFasting" class="neutral">-</b></div><div class="result-line"><span>식후 2시간 혈당 평균</span><b id="resultPost" class="neutral">-</b></div><div id="weakestMission" class="weakness">기록이 쌓이면 가장 자주 실패한 미션을 분석합니다.</div></div><div class="week-result"><h3>ACHIEVEMENTS</h3><div id="badgeStrip" class="badge-strip"></div></div><div id="weeklyJudge" class="judge-card">
+  <div class="judge-title"><strong>주간 판정</strong><span id="weeklyVerdict">분석 중</span></div>
+  <div id="weeklyMessage" class="judge-msg"></div>
+  <div class="metric-grid">
+    <div class="metric"><b id="weeklyAvg">0%</b><small>최근 7일 평균</small></div>
+    <div class="metric"><b id="targetRateText">80%</b><small>달성 목표</small></div>
+    <div class="metric"><b id="perfectDaysText">0일</b><small>완벽 성공일</small></div>
+    <div class="metric"><b id="failedDaysText">0일</b><small>목표 미달일</small></div>
+  </div>
+</div>
+<div class="card"><b id="missionChartTitle">WEEK 미션 성공률 추이</b><div class="chart-note">점선은 목표 달성률입니다. 날짜별 성공률을 선으로 연결해 상승·하락 흐름을 확인합니다.</div><canvas id="weekChart"></canvas></div>
+
+
+<div id="weightJudge" class="judge-card">
+  <div class="judge-title"><strong>체중 판정</strong><span id="weightVerdict">기록 필요</span></div>
+  <div id="weightMessage" class="judge-msg">체중을 2회 이상 기록하면 추세를 판정합니다.</div>
+  <div class="metric-grid">
+    <div class="metric"><b id="weightChangeText">-</b><small>시작 대비 변화</small></div>
+    <div class="metric"><b id="targetWeightText">-</b><small>목표 체중</small></div>
+    <div class="metric"><b id="trendText">-</b><small>최근 추세</small></div>
+    <div class="metric"><b id="penaltyText" class="penalty">₩0</b><small>체중 경고 차감</small></div>
+  </div>
+</div>
+<div class="card">
+<b id="weightChartTitle">WEEK 체중 추이</b>
+<div id="savedWeightText" style="margin:10px 0 12px;font-size:14px;color:#cbd1de">오늘 저장된 체중: 없음</div>
+<div class="weight-row"><input id="weightInput" type="number" step="0.1" placeholder="오늘 체중 kg"><button class="primary" onclick="saveWeight()">저장</button></div>
+<div id="weightHistoryText" style="margin-top:10px;font-size:11px;color:#8f98aa"></div>
+<canvas id="weightChart"></canvas>
+</div>
+
+<div class="card">
+  <b id="glucoseChartTitle">WEEK 혈당 추이</b>
+  <div class="sub" style="margin-top:5px">매일 공복 및 점심 식후 2시간 수치를 기록합니다. 단위: mg/dL</div>
+  <div class="glucose-current">
+    <div class="glucose-value"><strong id="fastingGlucoseText">-</strong><small>오늘 아침 공복</small></div>
+    <div class="glucose-value"><strong id="postGlucoseText">-</strong><small>오늘 점심 식후 2시간</small></div>
+  </div>
+  <div class="glucose-grid">
+    <div class="glucose-box">
+      <label>아침 공복 혈당</label>
+      <input id="fastingGlucoseInput" type="number" inputmode="numeric" min="20" max="600" placeholder="예: 95">
+    </div>
+    <div class="glucose-box">
+      <label>점심 식후 2시간 혈당</label>
+      <input id="postGlucoseInput" type="number" inputmode="numeric" min="20" max="600" placeholder="예: 130">
+    </div>
+  </div>
+  <button class="primary" style="width:100%;margin-top:9px" onclick="saveGlucose()">오늘 혈당 저장</button>
+  <div id="glucoseHistoryText" class="glucose-history"></div>
+  <canvas id="glucoseChart"></canvas>
+</div>
+</section>
+
+<section id="system" class="screen settings">
+<div class="header"><div><div class="eyebrow">SYSTEM</div><h1>데이터 관리</h1><div class="sub">장기 보관을 위해 가끔 백업하세요.</div></div></div>
+
+<div class="editor-card">
+  <b>미션 편집</b>
+  <div class="sub" style="margin:5px 0 10px">식단 내용과 적립금을 앱에서 직접 바꿀 수 있습니다.</div>
+  <div class="selector"><button id="cfgWeekday" class="active" onclick="setConfigMode('weekday')">평일</button><button id="cfgWeekend" onclick="setConfigMode('weekend')">주말</button></div>
+  <div id="missionEditor"></div>
+  <div class="editor-actions"><button onclick="addMissionRow()">단계 추가</button><button class="saveedit" onclick="saveMissionConfig()">미션 저장</button></div>
+  <label class="settings-label">주말 자유식 목표금액 (사용 안 함)</label>
+  <input id="goalAmountInput" style="display:none" type="number" min="1000" step="1000">
+  <label class="settings-label">앱 첫 화면 문구</label>
+  <input id="headlineInput" type="text" maxlength="30">
+  <button class="save-past" onclick="saveGeneralConfig()">기본 설정 저장</button>
+</div>
+
+
+<div class="editor-card">
+  <b>판정·차감 규칙</b>
+  <div class="sub" style="margin:5px 0 8px">일시적인 하루 체중이 아니라 최근 기록 평균이 증가할 때 차감합니다.</div>
+  <div class="rule-box">
+    <label>미션 목표 달성률 (%)</label>
+    <input id="targetRateInput" type="number" min="10" max="100" step="5">
+    <label>목표 체중 (kg)</label>
+    <input id="targetWeightInput" type="number" min="20" max="300" step="0.1">
+    <label>체중 경고 기준 증가폭 (kg)</label>
+    <input id="weightRiseThresholdInput" type="number" min="0.1" max="5" step="0.1">
+    <label>경고 발생 시 차감액 (원) (사용 안 함)</label>
+    <input id="weightPenaltyInput" type="number" min="0" step="500">
+    <div class="toggle-row"><span>체중 증가 시 주말 자금 차감 (사용 안 함)</span><input id="penaltyEnabledInput" type="checkbox"></div>
+    <button class="save-past" onclick="saveJudgeConfig()">판정 규칙 저장</button>
+  </div>
+</div>
+
+<div class="install-card">
+<b>앱 설치</b>
+<div class="sub" style="margin:5px 0 10px">홈 화면에 설치하면 일반 앱처럼 실행됩니다.</div>
+<button id="installBtn" onclick="installApp()">IRON DIET 설치</button>
+</div>
+<div class="card"><div class="data-grid"><button onclick="backup()">백업 저장</button><button onclick="document.getElementById('restore').click()">백업 복원</button></div><input id="restore" type="file" accept=".json,application/json" hidden onchange="restoreBackup(event)"><button class="danger" onclick="resetAll()">전체 기록 삭제</button></div>
+</section>
+</div>
+
+
+<div id="pastModal" class="modal" onclick="if(event.target===this)closePastEditor()">
+  <div class="modal-sheet">
+    <div class="modal-head"><div><div class="eyebrow">PAST RECORD EDIT</div><h3 id="editDateTitle">과거 기록 입력</h3></div><button class="closex" onclick="closePastEditor()">×</button></div>
+    <div class="selector"><button id="editWeekday" onclick="setEditMode('weekday')">평일 식단</button><button id="editWeekend" onclick="setEditMode('weekend')">주말 식단</button></div>
+    <div id="editList" class="edit-list"></div>
+    <button class="save-past" onclick="savePastRecord()">이 날짜 기록 저장</button>
+  </div>
+</div>
+
+<div class="nav"><button class="active" onclick="show('mission',this)">MISSION</button><button onclick="show('record',this)">RECORD</button><button onclick="show('stats',this)">STATS</button><button onclick="show('system',this)">SYSTEM</button></div>
+<div id="failOverlay" class="fail-overlay"><div class="fail-main">MISSION FAILED<small id="failAmount">-1,000 GOLD</small></div></div>
+<div id="overlay" class="overlay"><div class="slash"></div><div class="slash s2"></div><div class="shock"></div><div class="fxtext"><div id="fxK" class="k">MISSION</div><div id="fxMain" class="main">CLEAR!</div><div id="fxGold" class="gold">+1,000 GOLD</div></div></div><div id="flash" class="flash"></div>
+
+<script>
+const DEFAULT_WD=[
+ {name:'아침 단백질 섭취',desc:'아침 단백질 섭취로 하루 시작',reward:1000},
+ {name:'오전 10시 아이스아메리카노',desc:'군것질 대신 깔끔하게',reward:1000},
+ {name:'점심 자유식 + 밥 반 공기',desc:'먹되 양은 통제',reward:1000},
+ {name:'점심 후 30분 서서 일하기',desc:'식후 활동 미션',reward:1000},
+ {name:'저녁 샐러드 + 닭가슴살',desc:'저녁 방어 성공',reward:1000},
+ {name:'마루 산책',desc:'오늘의 마지막 승리',reward:1000}
+];
+const DEFAULT_WE=[
+ {name:'아침 단백질 섭취',desc:'주말에도 아침 단백질 섭취',reward:1500},
+ {name:'자유식 점심',desc:'평일에 번 보상',reward:1500},
+ {name:'마루 산책',desc:'먹었으면 움직이기',reward:1500},
+ {name:'저녁 샐러드 + 닭가슴살',desc:'주말 폭주 차단',reward:1500}
+];
+function getMissions(mode){
+ const arr=state.config?.missions?.[mode] || (mode==='weekday'?DEFAULT_WD:DEFAULT_WE);
+ return arr.map(x=>Array.isArray(x)?{name:x[0],desc:x[1]||'',reward:mode==='weekday'?1000:1500}:x);
+}
+let state=JSON.parse(localStorage.getItem('ironDietV6')||'{"days":{},"weights":{}}');
+if(!state.days)state.days={};
+if(!state.weights)state.weights={};
+if(!state.glucose)state.glucose={};
+if(!state.config)state.config={};
+if(!state.config.goal)state.config.goal=30000;
+if(!state.config.headline)state.config.headline='오늘도 이긴다';
+if(!state.config.missions)state.config.missions={weekday:DEFAULT_WD,weekend:DEFAULT_WE};
+if(state.config.targetRate==null)state.config.targetRate=80;
+if(state.config.targetWeight==null)state.config.targetWeight=120;
+if(state.config.weightRiseThreshold==null)state.config.weightRiseThreshold=0.3;
+if(state.config.weightPenalty==null)state.config.weightPenalty=1000;
+if(state.config.penaltyEnabled==null)state.config.penaltyEnabled=true;
+let calDate=new Date();
+const key=(d=new Date())=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+function save(){localStorage.setItem('ironDietV6',JSON.stringify(state))}
+function today(){const k=key();if(!state.days[k])state.days[k]={mode:(new Date().getDay()%6===0?'weekend':'weekday'),checks:[]};return state.days[k]}
+function chooseMode(m){today().mode=m;today().checks=[];today().outcomes=[];save();render()}
+function rewardPer(mode,index=0){const list=getMissions(mode);return Number(list[index]?.reward||0)}
+function normalizeOutcome(v){
+ if(v===true)return 'success';
+ if(v==='success'||v==='fail')return v;
+ return null;
+}
+function outcomesOf(day){
+ const arr=day.outcomes||day.checks||[];
+ return arr.map(normalizeOutcome);
+}
+function migrateDays(){
+ Object.values(state.days).forEach(d=>{
+   if(!d.outcomes)d.outcomes=(d.checks||[]).map(normalizeOutcome);
+ });
+}
+migrateDays();
+function earnedBank(){
+ return Object.values(state.days).reduce((sum,d)=>{
+   const o=outcomesOf(d);
+   return sum+o.reduce((s,v,i)=>s+(v==='success'?rewardPer(d.mode||'weekday',i):0),0);
+ },0)
+}
+function failurePenaltyAmount(){
+ return Object.values(state.days).reduce((sum,d)=>{
+   const o=outcomesOf(d);
+   return sum+o.reduce((s,v,i)=>s+(v==='fail'?rewardPer(d.mode||'weekday',i):0),0);
+ },0)
+}
+function weightPenaltyAmount(){
+ if(!state.config.penaltyEnabled)return 0;
+ const entries=Object.entries(state.weights).sort();
+ if(entries.length<4)return 0;
+ const latest=entries.slice(-2).map(x=>Number(x[1]));
+ const prior=entries.slice(-4,-2).map(x=>Number(x[1]));
+ const latestAvg=latest.reduce((a,b)=>a+b,0)/latest.length;
+ const priorAvg=prior.reduce((a,b)=>a+b,0)/prior.length;
+ const rise=latestAvg-priorAvg;
+ if(rise < Number(state.config.weightRiseThreshold||0.3))return 0;
+ return Number(state.config.weightPenalty||1000);
+}
+function totalBank(){return Math.max(0,earnedBank()-failurePenaltyAmount()-weightPenaltyAmount())}
+function render(){
+ const d=today(),list=getMissions(d.mode),outcomes=outcomesOf(d);
+ d.outcomes=outcomes;
+ document.getElementById('weekday').classList.toggle('active',d.mode==='weekday');
+ document.getElementById('weekend').classList.toggle('active',d.mode==='weekend');
+ const successCount=outcomes.filter(v=>v==='success').length;
+ const failCount=outcomes.filter(v=>v==='fail').length;
+ document.getElementById('missionTitle').textContent=`${d.mode==='weekday'?'평일':'주말'} ${list.length}단계`;
+ document.getElementById('countText').textContent=`성공 ${successCount} · 실패 ${failCount} · 미정 ${Math.max(0,list.length-successCount-failCount)}`;
+ document.getElementById('missions').innerHTML=list.map((m,i)=>{
+   const status=outcomes[i];
+   const cls=status==='success'?'done':status==='fail'?'failed':'';
+   const mark=status==='success'?'✓':status==='fail'?'✕':i+1;
+   return `<div class="mission ${cls}">
+    <div class="step">${mark}</div>
+    <div><b>${m.name}</b><small>${m.desc}</small></div>
+    <div class="reward"></div>
+    <div class="mission-actions">
+      <button class="success-btn" onclick="setOutcome(${i},'success')">${status==='success'?'성공 취소':'SUCCESS'}</button>
+      <button class="fail-btn" onclick="setOutcome(${i},'fail')">${status==='fail'?'실패 취소':'FAIL'}</button>
+    </div>
+   </div>`;
+ }).join('');
+ updateHeader();renderCalendar();if(!document.getElementById('fullRecordsPanel')?.classList.contains('collapsed'))renderFullRecords();drawAll();
+}
+function setOutcome(i,status){
+ const d=today();
+ if(!d.outcomes)d.outcomes=outcomesOf(d);
+ const prev=d.outcomes[i];
+ d.outcomes[i]=(prev===status?null:status);
+ d.checks=d.outcomes.map(v=>v==='success');
+ save();
+ if(d.outcomes[i]==='success'){
+   const combo=d.outcomes.filter(v=>v==='success').length;
+   impact(combo,getMissions(d.mode).length);
+ }else if(d.outcomes[i]==='fail'){
+   failImpact(rewardPer(d.mode,i));
+ }
+ render();
+}
+function updateHeader(){const b=totalBank(),goal=Number(state.config.goal||30000),p=Math.min(100,b/goal*100);document.getElementById('bank').textContent=b.toLocaleString();
+document.getElementById('goalText').textContent=goal.toLocaleString();
+const bb=document.getElementById('bankBreakdown');
+if(bb)bb.innerHTML=`성공 적립 <b style="color:#42ef93">+₩${earnedBank().toLocaleString()}</b> · 실패 차감 <b style="color:#ff718d">-₩${failurePenaltyAmount().toLocaleString()}</b> · 체중 차감 <b style="color:#ff718d">-₩${weightPenaltyAmount().toLocaleString()}</b>`;document.getElementById('moneyFill').style.width=p+'%';document.getElementById('vault').innerHTML=Array.from({length:Math.max(1,Math.ceil(goal/1000))},(_,i)=>`<div class="coin ${i<Math.floor(b/1000)?'on':''}"></div>`).join('');const pc=countPerfect();document.getElementById('rank').textContent=pc>=30?'S+':pc>=20?'S':pc>=12?'A':pc>=6?'B':pc>=2?'C':'D'}
+function impact(combo,total){const perfect=combo===total,o=document.getElementById('overlay'),f=document.getElementById('flash');document.getElementById('fxK').textContent=perfect?'ALL MISSIONS':'MISSION';document.getElementById('fxMain').textContent=perfect?'PERFECT DAY':'CLEAR!';document.getElementById('fxGold').textContent=`${combo} COMBO · 기록 반영`;o.className='overlay'+(perfect?' perfect':'');void o.offsetWidth;o.classList.add('show');f.classList.remove('show');void f.offsetWidth;f.classList.add('show');document.body.classList.remove('shake');void document.body.offsetWidth;document.body.classList.add('shake');document.querySelectorAll('.spark').forEach(x=>x.remove());for(let i=0;i<(perfect?70:45);i++){const s=document.createElement('i');s.className='spark';s.style.left='50%';s.style.top='50%';const a=Math.random()*Math.PI*2,dist=120+Math.random()*260;s.animate([{transform:'translate(-50%,-50%) rotate('+a+'rad) scale(1)',opacity:1},{transform:`translate(calc(-50% + ${Math.cos(a)*dist}px),calc(-50% + ${Math.sin(a)*dist}px)) rotate(${a+4}rad) scale(.1)`,opacity:0}],{duration:700+Math.random()*600,easing:'cubic-bezier(.1,.8,.2,1)'});o.appendChild(s)}if(navigator.vibrate)navigator.vibrate(perfect?[100,40,130,40,220]:[80,30,120])}
+function failImpact(amount){
+ const o=document.getElementById('failOverlay');
+ document.getElementById('failAmount').textContent='실패 기록 반영';
+ o.classList.remove('show');void o.offsetWidth;o.classList.add('show');
+ document.body.classList.remove('shake');void document.body.offsetWidth;document.body.classList.add('shake');
+ if(navigator.vibrate)navigator.vibrate([160,50,230]);
+}
+function countPerfect(){return Object.values(state.days).filter(d=>outcomesOf(d).filter(v=>v==='success').length===getMissions(d.mode).length).length}
+function rateFor(d){const x=state.days[key(d)];if(!x)return 0;return Math.round(outcomesOf(x).filter(v=>v==='success').length/getMissions(x.mode).length*100)}
+
+let chartRange='all';
+const RANGE_DAYS={week:7,month:30,quarter:90,year:365,all:null};
+const RANGE_LABEL={week:'WEEK',month:'MONTH',quarter:'QUARTER',year:'YEAR',all:'ALL'};
+
+function labelStep(count){if(count<=10)return 1;if(count<=31)return Math.ceil(count/8);if(count<=100)return Math.ceil(count/10);if(count<=370)return Math.ceil(count/12);return Math.ceil(count/14)}
+function firstLast(obj,field=null){const e=Object.entries(obj||{}).sort().filter(([k,v])=>field?(v&&v[field]!=null):v!=null);if(!e.length)return null;return {firstDate:e[0][0],lastDate:e.at(-1)[0],first:field?Number(e[0][1][field]):Number(e[0][1]),last:field?Number(e.at(-1)[1][field]):Number(e.at(-1)[1])}}
+function fmtLife(x,unit,dec=1){if(!x)return '-';const d=x.last-x.first;return `${x.first.toFixed(dec)} → ${x.last.toFixed(dec)} ${unit} (${d>0?'+':''}${d.toFixed(dec)})`}
+function updateLifetimeSummary(){const w=firstLast(state.weights),f=firstLast(state.glucose,'fasting'),p=firstLast(state.glucose,'post2h');const we=document.getElementById('weightLifetime');if(we)we.textContent=fmtLife(w,'kg',1);const fe=document.getElementById('fastingLifetime');if(fe)fe.textContent=fmtLife(f,'mg/dL',0);const pe=document.getElementById('postLifetime');if(pe)pe.textContent=fmtLife(p,'mg/dL',0);const dates=[...Object.keys(state.days||{}),...Object.keys(state.weights||{}),...Object.keys(state.glucose||{})].sort();const hs=document.getElementById('historySpan');if(hs){if(!dates.length)hs.textContent='기록 없음';else{const a=new Date(dates[0]+'T12:00:00'),b=new Date(dates.at(-1)+'T12:00:00'),days=Math.max(1,Math.round((b-a)/86400000)+1);hs.textContent=`${dates[0]} → ${dates.at(-1)} · ${days.toLocaleString()}일`}}}
+function setChartRange(r){
+ chartRange=r;
+ ['week','month','quarter','year','all'].forEach(x=>{
+   const id='range'+x.charAt(0).toUpperCase()+x.slice(1);
+   document.getElementById(id)?.classList.toggle('active',x===r);
+ });
+ drawAll();
+}
+function rangeCutoff(days){
+ const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-(days-1));return d;
+}
+function filteredEntries(obj,days){const all=Object.entries(obj||{}).sort();if(days==null)return all;const cutoff=rangeCutoff(days);return all.filter(([k])=>new Date(k+'T12:00:00')>=cutoff)}
+function updateRangeSummary(){
+ const days=RANGE_DAYS[chartRange],label=RANGE_LABEL[chartRange];
+ const dayEntries=filteredEntries(state.days,days);
+ const avg=dayEntries.length?Math.round(dayEntries.reduce((s,[k])=>s+rateFor(new Date(k+'T12:00:00')),0)/dayEntries.length):0;
+ document.getElementById('rangeMissionAvg').textContent=avg+'%';
+
+ const ws=filteredEntries(state.weights,days);
+ if(ws.length>=2){
+   const diff=Number(ws.at(-1)[1])-Number(ws[0][1]);
+   document.getElementById('rangeWeightChange').textContent=(diff>0?'+':'')+diff.toFixed(1)+'kg';
+ }else document.getElementById('rangeWeightChange').textContent='-';
+
+ const gs=filteredEntries(state.glucose,days).map(x=>x[1].fasting).filter(v=>v!=null).map(Number);
+ document.getElementById('rangeGlucoseAvg').textContent=gs.length?Math.round(gs.reduce((a,b)=>a+b,0)/gs.length):'-';
+
+ document.getElementById('missionChartTitle').textContent=`${label} 미션 달성률`;
+ document.getElementById('weightChartTitle').textContent=`${label} 체중 추이`;
+ document.getElementById('glucoseChartTitle').textContent=`${label} 혈당 추이`;
+}
+
+function draw(canvasId,days,weight=false){const c=document.getElementById(canvasId),ctx=c.getContext('2d'),r=devicePixelRatio||1,w=c.clientWidth,h=c.clientHeight;c.width=w*r;c.height=h*r;ctx.scale(r,r);ctx.clearRect(0,0,w,h);ctx.strokeStyle='#2b3242';[0,.25,.5,.75,1].forEach(v=>{let y=10+(h-34)*(1-v);ctx.beginPath();ctx.moveTo(25,y);ctx.lineTo(w-8,y);ctx.stroke()});
+if(!weight){
+ const target=Math.max(0,Math.min(100,Number(state.config.targetRate||80)));
+ const ty=10+(h-34)*(1-target/100);
+ ctx.save();ctx.setLineDash([7,5]);ctx.strokeStyle='#ffd34d';ctx.lineWidth=2;
+ ctx.beginPath();ctx.moveTo(25,ty);ctx.lineTo(w-8,ty);ctx.stroke();
+ ctx.setLineDash([]);ctx.fillStyle='#ffd34d';ctx.font='10px sans-serif';ctx.fillText(`목표 ${target}%`,28,Math.max(11,ty-5));ctx.restore();
+}
+let vals=[];if(weight){
+const entries=filteredEntries(state.weights,days);
+if(!entries.length){ctx.fillStyle='#8f98aa';ctx.font='12px sans-serif';ctx.fillText('체중 기록을 입력하세요',30,90);return}
+vals=entries.map(x=>+x[1]);
+const min=Math.min(...vals)-1,max=Math.max(...vals)+1;
+const pts=vals.map((v,i)=>({x:25+i*(w-40)/Math.max(1,vals.length-1),y:10+(h-34)*(1-(v-min)/(max-min)),v,date:entries[i][0]}));
+ctx.strokeStyle='#4bdcff';ctx.lineWidth=3;ctx.beginPath();
+pts.forEach((p,i)=>{i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y)});ctx.stroke();
+const targetW=Number(state.config.targetWeight||0);
+if(targetW>0 && targetW>=min && targetW<=max){
+ const tY=10+(h-34)*(1-(targetW-min)/(max-min));
+ ctx.save();ctx.setLineDash([7,5]);ctx.strokeStyle='#ffd34d';ctx.lineWidth=2;
+ ctx.beginPath();ctx.moveTo(25,tY);ctx.lineTo(w-8,tY);ctx.stroke();ctx.setLineDash([]);
+ ctx.fillStyle='#ffd34d';ctx.font='10px sans-serif';ctx.fillText(`목표 ${targetW.toFixed(1)}`,28,Math.max(11,tY-5));ctx.restore();
+}
+pts.forEach((p,i)=>{
+ ctx.beginPath();
+ const up=i>0 && p.v>pts[i-1].v;
+ ctx.fillStyle=up?'#ff244c':'#42ef93';
+ ctx.arc(p.x,p.y,6,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle=up?'#ff9aae':'#d8ffe8';ctx.font='10px sans-serif';ctx.textAlign='center';ctx.fillText(p.v.toFixed(1),p.x,p.y-10)
+});
+ctx.fillStyle='#8f98aa';ctx.font='9px sans-serif';ctx.textAlign='center';
+entries.forEach((e,i)=>{
+ if(entries.length<=10||i%labelStep(entries.length)===0||i===entries.length-1){
+   const x=25+i*(w-40)/Math.max(1,entries.length-1);
+   ctx.fillText(e[0].slice(5).replace('-','/'),x,h-7);
+ }
+});
+ctx.textAlign='start';return}const entries=(days==null?Object.keys(state.days):Object.keys(state.days).filter(k=>new Date(k+'T12:00:00')>=rangeCutoff(days))).sort()
+ .map(k=>({date:k,rate:rateFor(new Date(k+'T12:00:00'))}));
+if(!entries.length){
+ ctx.fillStyle='#8f98aa';ctx.font='12px sans-serif';ctx.fillText('기록이 생기면 왼쪽부터 표시됩니다',30,90);return
+}
+const pts=entries.map((e,i)=>({
+ x:28+i*(w-46)/Math.max(1,entries.length-1),
+ y:10+(h-38)*(1-e.rate/100),rate:e.rate,date:e.date
+}));
+ctx.save();ctx.strokeStyle='#ff7a28';ctx.lineWidth=3;ctx.beginPath();
+pts.forEach((p,i)=>{i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y)});ctx.stroke();
+pts.forEach((p,i)=>{
+ ctx.beginPath();ctx.fillStyle=p.rate>=Number(state.config.targetRate||80)?'#42ef93':'#ff5a45';
+ ctx.arc(p.x,p.y,5.5,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#dce3ef';ctx.font='10px sans-serif';ctx.textAlign='center';ctx.fillText(p.rate+'%',p.x,p.y-10);
+ if(entries.length<=10||i%labelStep(entries.length)===0||i===entries.length-1){
+   ctx.fillStyle='#929bad';ctx.font='9px sans-serif';ctx.fillText(p.date.slice(5).replace('-','/'),p.x,h-7);
+ }
+});ctx.restore();ctx.textAlign='start';}
+
+function drawGlucoseChart(){
+ const c=document.getElementById('glucoseChart');
+ if(!c)return;
+ const ctx=c.getContext('2d'),r=devicePixelRatio||1,w=c.clientWidth,h=c.clientHeight;
+ c.width=w*r;c.height=h*r;ctx.scale(r,r);ctx.clearRect(0,0,w,h);
+ const entries=filteredEntries(state.glucose||{},RANGE_DAYS[chartRange]);
+ if(!entries.length){
+   ctx.fillStyle='#8f98aa';ctx.font='12px sans-serif';ctx.fillText('혈당 기록을 입력하면 추이가 표시됩니다',28,90);return;
+ }
+ const values=[];
+ entries.forEach(([d,g])=>{if(g.fasting!=null)values.push(Number(g.fasting));if(g.post2h!=null)values.push(Number(g.post2h))});
+ const min=Math.max(0,Math.min(...values)-20),max=Math.max(...values)+20;
+ ctx.strokeStyle='#2b3242';ctx.lineWidth=1;
+ [0,.25,.5,.75,1].forEach(v=>{const y=10+(h-36)*(1-v);ctx.beginPath();ctx.moveTo(28,y);ctx.lineTo(w-8,y);ctx.stroke()});
+ const makePts=(field)=>entries.map(([date,g],i)=>{
+   const val=g[field]==null?null:Number(g[field]);
+   const x=30+i*(w-44)/Math.max(1,entries.length-1);
+   const y=val==null?null:10+(h-36)*(1-(val-min)/(max-min));
+   return {x,y,val,date};
+ });
+ const drawSeries=(pts,dash)=>{
+   ctx.save();ctx.strokeStyle=dash?'#ffb347':'#4bdcff';ctx.lineWidth=3;
+   if(dash)ctx.setLineDash([7,4]);
+   let started=false;ctx.beginPath();
+   pts.forEach(p=>{if(p.val==null)return;if(!started){ctx.moveTo(p.x,p.y);started=true}else ctx.lineTo(p.x,p.y)});
+   ctx.stroke();ctx.setLineDash([]);
+   pts.forEach(p=>{if(p.val==null)return;ctx.beginPath();ctx.fillStyle=dash?'#ffb347':'#4bdcff';ctx.arc(p.x,p.y,5,0,Math.PI*2);ctx.fill()});
+   ctx.restore();
+ };
+ drawSeries(makePts('fasting'),false);
+ drawSeries(makePts('post2h'),true);
+ ctx.font='9px sans-serif';ctx.fillStyle='#8f98aa';ctx.textAlign='center';
+ entries.forEach(([date],i)=>{if(entries.length<=10||i%labelStep(entries.length)===0||i===entries.length-1){const x=30+i*(w-44)/Math.max(1,entries.length-1);ctx.fillText(date.slice(5).replace('-','/'),x,h-7)}});
+ ctx.textAlign='left';ctx.fillStyle='#4bdcff';ctx.fillText('● 공복',30,13);ctx.fillStyle='#ffb347';ctx.fillText('● 식후 2시간',82,13);
+}
+function saveGlucose(){
+ const fEl=document.getElementById('fastingGlucoseInput');
+ const pEl=document.getElementById('postGlucoseInput');
+ const f=fEl.value.trim()===''?null:Number(fEl.value);
+ const p=pEl.value.trim()===''?null:Number(pEl.value);
+ if(f===null&&p===null)return alert('공복 또는 식후 2시간 혈당을 입력해 주세요.');
+ if((f!==null&&(f<20||f>600||!Number.isFinite(f)))||(p!==null&&(p<20||p>600||!Number.isFinite(p))))return alert('혈당 수치를 확인해 주세요.');
+ const existing=state.glucose[key()]||{};
+ if(f!==null)existing.fasting=Math.round(f);
+ if(p!==null)existing.post2h=Math.round(p);
+ state.glucose[key()]=existing;
+ save();drawAll();alert('오늘 혈당이 저장되었습니다.');
+}
+function updateGlucoseDisplay(){
+ const g=(state.glucose||{})[key()]||{};
+ const fText=document.getElementById('fastingGlucoseText'),pText=document.getElementById('postGlucoseText');
+ const fInput=document.getElementById('fastingGlucoseInput'),pInput=document.getElementById('postGlucoseInput');
+ if(fText)fText.textContent=g.fasting!=null?g.fasting+' mg/dL':'-';
+ if(pText)pText.textContent=g.post2h!=null?g.post2h+' mg/dL':'-';
+ if(fInput&&g.fasting!=null)fInput.value=g.fasting;
+ if(pInput&&g.post2h!=null)pInput.value=g.post2h;
+ const h=document.getElementById('glucoseHistoryText');
+ if(h){
+   const e=Object.entries(state.glucose||{}).sort().slice(-5).reverse();
+   h.innerHTML=e.length?'최근 기록<br>'+e.map(([d,x])=>`${d.slice(5)} · 공복 ${x.fasting??'-'} / 식후2H ${x.post2h??'-'} mg/dL`).join('<br>'):'';
+ }
+ drawGlucoseChart();
+}
+
+
+function progressRecordedDates(){return Object.keys(state.days||{}).sort()}
+function progressDayRate(k){const d=state.days[k];if(!d)return 0;return Math.round(outcomesOf(d).filter(v=>v==='success').length/Math.max(1,getMissions(d.mode).length)*100)}
+function progressWeekKeys(offset=0){const n=new Date();n.setHours(12,0,0,0);const dow=(n.getDay()+6)%7;const mon=new Date(n);mon.setDate(n.getDate()-dow+offset*7);return Array.from({length:7},(_,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+i);return key(d)})}
+function progressAvgRate(keys){const a=keys.filter(k=>state.days[k]).map(progressDayRate);return a.length?Math.round(a.reduce((x,y)=>x+y,0)/a.length):0}
+function progressRank(r){if(r>=95)return 'S+';if(r>=90)return 'S';if(r>=80)return 'A';if(r>=70)return 'B';if(r>=60)return 'C';return 'D'}
+function progressStreak(){const good=new Set(progressRecordedDates().filter(k=>progressDayRate(k)>=80));let d=new Date(),n=0;d.setHours(12,0,0,0);for(let i=0;i<5000;i++){const k=key(d);if(good.has(k)){n++;d.setDate(d.getDate()-1)}else if(i===0)d.setDate(d.getDate()-1);else break}return n}
+function progressPerfectWeeks(){const groups={};progressRecordedDates().forEach(k=>{const d=new Date(k+'T12:00:00'),x=(d.getDay()+6)%7,m=new Date(d);m.setDate(d.getDate()-x);(groups[key(m)]??=[]).push(k)});return Object.values(groups).filter(a=>a.length===7&&a.every(k=>progressDayRate(k)===100)).length}
+function progressMetric(obj,keys,field){const v=keys.map(k=>field?obj?.[k]?.[field]:obj?.[k]).filter(x=>x!=null).map(Number);return v.length?v.reduce((a,b)=>a+b,0)/v.length:null}
+function progressSetDiff(id,cur,prev,suffix='',lowerBetter=true){const e=document.getElementById(id);if(!e)return;if(cur==null||prev==null){e.textContent='-';e.className='neutral';return}const d=cur-prev;e.textContent=(d>0?'+':'')+d.toFixed(suffix==='kg'?1:0)+suffix;e.className=Math.abs(d)<.001?'neutral':((lowerBetter?d<0:d>0)?'up':'down')}
+function updateProgressSystem(){
+ const cur=progressWeekKeys(0),prev=progressWeekKeys(-1),r=progressAvgRate(cur),pr=progressAvgRate(prev),rk=progressRank(r);
+ const a=document.getElementById('homeRank');if(a)a.textContent=rk;const b=document.getElementById('homeWeekRate');if(b)b.textContent=r+'%';const f=document.getElementById('homeRankFill');if(f)f.style.width=Math.min(100,r)+'%';const m=document.getElementById('homeRankMsg');if(m)m.textContent=r>=80?'목표권 유지 중':r?`A RANK까지 ${80-r}%p`:'기록을 시작하세요';
+ const st=document.getElementById('homeStreak');if(st)st.textContent=progressStreak();const pw=document.getElementById('homePerfectWeeks');if(pw)pw.textContent=progressPerfectWeeks();const td=document.getElementById('homeTotalDays');if(td)td.textContent=progressRecordedDates().length;
+ const rm=document.getElementById('resultMission');if(rm){const d=r-pr;rm.textContent=`${r}%${pr?` (${d>=0?'+':''}${d}%p)`:''}`;rm.className=pr?(d>=0?'up':'down'):'neutral'}
+ progressSetDiff('resultWeight',progressMetric(state.weights,cur),progressMetric(state.weights,prev),'kg',true);progressSetDiff('resultFasting',progressMetric(state.glucose,cur,'fasting'),progressMetric(state.glucose,prev,'fasting'),'',true);progressSetDiff('resultPost',progressMetric(state.glucose,cur,'post2h'),progressMetric(state.glucose,prev,'post2h'),'',true);
+ const cnt={};cur.forEach(k=>{const d=state.days[k];if(!d)return;outcomesOf(d).forEach((v,i)=>{if(v==='fail'){const nm=getMissions(d.mode)[i]?.name||'미션';cnt[nm]=(cnt[nm]||0)+1}})});const arr=Object.entries(cnt).sort((x,y)=>y[1]-x[1]);const we=document.getElementById('weakestMission');if(we)we.textContent=arr.length?`이번 주 가장 많이 실패한 미션: ${arr[0][0]} · ${arr[0][1]}회`:'이번 주 명시적인 실패 기록이 없습니다.';
+ const badges=[['FIRST WEEK',progressRecordedDates().length>=7],['7 DAY STREAK',progressStreak()>=7],['30 DAY STREAK',progressStreak()>=30],['PERFECT WEEK',progressPerfectWeeks()>=1],['A RANK',r>=80],['S RANK',r>=90],['S+ RANK',r>=95]];const bs=document.getElementById('badgeStrip');if(bs)bs.innerHTML=badges.map(([n,on])=>`<span class="badge ${on?'unlocked':''}">${on?'★':'○'} ${n}</span>`).join('');
+}
+
+
+
+function toggleFullRecords(){
+ const panel=document.getElementById('fullRecordsPanel');
+ const label=document.getElementById('recordsToggleText');
+ if(!panel)return;
+ const opening=panel.classList.contains('collapsed');
+ panel.classList.toggle('collapsed',!opening);
+ if(label)label.textContent=opening?'접기 ▲':'펼치기 ▼';
+ if(opening)renderFullRecords();
+}
+
+function allHealthDates(){
+ return [...new Set([
+   ...Object.keys(state.weights||{}),
+   ...Object.keys(state.glucose||{})
+ ])].sort().reverse();
+}
+function renderFullRecords(){
+ const box=document.getElementById('fullRecordList');
+ if(!box)return;
+ const q=(document.getElementById('recordSearch')?.value||'').trim();
+ let dates=allHealthDates();
+ if(q)dates=dates.filter(d=>d.includes(q));
+ const count=document.getElementById('fullRecordCount');
+ if(count)count.textContent=`${dates.length.toLocaleString()}건`;
+ let html=`<div class="record-row head"><span class="date">날짜</span><span>체중</span><span>공복</span><span>식후2H</span></div>`;
+ if(!dates.length){
+   box.innerHTML=html+`<div class="record-empty">해당 기록이 없습니다.</div>`;
+   return;
+ }
+ html+=dates.map(d=>{
+   const w=state.weights?.[d];
+   const g=state.glucose?.[d]||{};
+   return `<div class="record-row">
+     <b class="date">${d}</b>
+     <span>${w!=null?Number(w).toFixed(1)+' kg':'-'}</span>
+     <span>${g.fasting!=null?g.fasting+' mg/dL':'-'}</span>
+     <span>${g.post2h!=null?g.post2h+' mg/dL':'-'}</span>
+   </div>`;
+ }).join('');
+ box.innerHTML=html;
+}
+function exportHealthCSV(){
+ const rows=[['날짜','체중(kg)','공복혈당(mg/dL)','점심식후2시간혈당(mg/dL)']];
+ [...allHealthDates()].reverse().forEach(d=>{
+   const g=state.glucose?.[d]||{};
+   rows.push([d,state.weights?.[d]??'',g.fasting??'',g.post2h??'']);
+ });
+ const csv='\uFEFF'+rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+ const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement('a');
+ a.href=url;
+ a.download=`IRON_DIET_HEALTH_RECORDS_${key()}.csv`;
+ document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+function drawAll(){
+updateProgressSystem();
+const rangeDays=RANGE_DAYS[chartRange];
+draw('weekChart',rangeDays);
+draw('weightChart',rangeDays,true);
+updateRangeSummary();updateLifetimeSummary();
+document.getElementById('perfects').textContent=countPerfect()+'회';
+document.getElementById('total').textContent=Object.values(state.days).reduce((s,d)=>s+outcomesOf(d).filter(v=>v==='success').length,0)+'개';
+document.getElementById('streak').textContent=streak()+'일';
+const todayW=state.weights[key()];
+const sw=document.getElementById('savedWeightText');
+const wi=document.getElementById('weightInput');
+const wh=document.getElementById('weightHistoryText');
+if(sw)sw.textContent=todayW?`오늘 저장된 체중: ${Number(todayW).toFixed(1)} kg`:'오늘 저장된 체중: 없음';
+if(wi&&todayW)wi.value=Number(todayW).toFixed(1);
+if(wh){
+ const e=Object.entries(state.weights).sort().slice(-5).reverse();
+ wh.textContent=e.length?'최근 기록: '+e.map(x=>`${x[0].slice(5)} ${Number(x[1]).toFixed(1)}kg`).join(' · '):'';
+}
+updateJudges();
+updateGlucoseDisplay();
+}
+function streak(){let n=0,d=new Date();for(let i=0;i<500;i++){if(rateFor(d)>0)n++;else if(i>0)break;d.setDate(d.getDate()-1)}return n}
+function renderCalendar(){if(!document.getElementById('calendar'))return;const y=calDate.getFullYear(),m=calDate.getMonth(),first=new Date(y,m,1),last=new Date(y,m+1,0);document.getElementById('monthTitle').textContent=`${y}년 ${m+1}월`;let h=['일','월','화','수','목','금','토'].map(x=>`<div class="dow">${x}</div>`).join('');for(let i=0;i<first.getDay();i++)h+='<button class="day empty"></button>';for(let d=1;d<=last.getDate();d++){
+ const dt=new Date(y,m,d),x=state.days[key(dt)],r=x?rateFor(dt):0;
+ let cls='';
+ if(x){
+   if(r>=100)cls='rate100';
+   else if(r>=80)cls='rate80';
+   else if(r>=50)cls='rate50';
+   else if(r>=30)cls='rate30';
+   else if(r>0)cls='rate1';
+ }
+ h+=`<button class="day ${cls} ${key(dt)===key()?'today':''}" onclick="showDay('${key(dt)}')" title="${x?r+'% 달성':'기록 없음'}">${d}</button>`
+}document.getElementById('calendar').innerHTML=h}
+let editKey=null,editMode='weekday',editChecks=[];
+function showDay(k){openPastEditor(k)}
+function openPastEditor(k){
+ editKey=k;
+ const existing=state.days[k];
+ const dt=new Date(k+'T12:00:00');
+ editMode=existing?.mode||((dt.getDay()===0||dt.getDay()===6)?'weekend':'weekday');
+ editChecks=existing?outcomesOf(existing):[];
+ document.getElementById('editDateTitle').textContent=`${k} 기록 입력`;
+ document.getElementById('pastModal').classList.add('show');
+ renderPastEditor();
+}
+function closePastEditor(){document.getElementById('pastModal').classList.remove('show')}
+function setEditMode(m){
+ if(editMode!==m && editChecks.some(Boolean) && !confirm('식단을 바꾸면 현재 체크가 초기화됩니다. 바꿀까요?'))return;
+ if(editMode!==m)editChecks=[];
+ editMode=m;renderPastEditor();
+}
+function renderPastEditor(){
+ const list=getMissions(editMode);
+ document.getElementById('editWeekday').classList.toggle('active',editMode==='weekday');
+ document.getElementById('editWeekend').classList.toggle('active',editMode==='weekend');
+ document.getElementById('editList').innerHTML=list.map((m,i)=>{
+   const status=normalizeOutcome(editChecks[i]);
+   return `<div class="edit-item" style="display:block">
+     <div><b>${m.name}</b><small>${m.desc} · 성공 +₩${Number(m.reward||0).toLocaleString()} / 실패 -₩${Number(m.reward||0).toLocaleString()}</small></div>
+     <div class="edit-status">
+       <button class="${!status?'on-success':''}" onclick="editChecks[${i}]=null;renderPastEditor()">미정</button>
+       <button class="${status==='success'?'on-success':''}" onclick="editChecks[${i}]='success';renderPastEditor()">성공</button>
+       <button class="${status==='fail'?'on-fail':''}" onclick="editChecks[${i}]='fail';renderPastEditor()">실패</button>
+     </div>
+   </div>`;
+ }).join('');
+}
+function savePastRecord(){
+ if(!editKey)return;
+ state.days[editKey]={mode:editMode,outcomes:[...editChecks],checks:editChecks.map(v=>v==='success')};
+ save();closePastEditor();render();
+ document.getElementById('history').innerHTML=`<b>${editKey}</b> 기록이 저장되었습니다.`;
+ alert(`${editKey} 기록 저장 완료`);
+}
+function moveMonth(n){calDate.setMonth(calDate.getMonth()+n);renderCalendar()}
+function saveWeight(){
+const input=document.getElementById('weightInput');
+const v=parseFloat(input.value);
+if(Number.isNaN(v)||v<20||v>300)return alert('체중을 확인해 주세요.');
+state.weights[key()]=Math.round(v*10)/10;
+save();drawAll();
+alert(`오늘 체중 ${state.weights[key()].toFixed(1)}kg 저장 완료`);
+}
+function backup(){const blob=new Blob([JSON.stringify({app:'IRON_DIET_V6',exported:new Date().toISOString(),state},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`IRON_DIET_BACKUP_${key()}.json`;a.click();URL.revokeObjectURL(a.href)}
+function restoreBackup(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const j=JSON.parse(r.result);const s=j.state||j;if(!s.days)throw 0;if(confirm('현재 기록을 백업 파일로 교체할까요?')){state=s;if(!state.weights)state.weights={};if(!state.glucose)state.glucose={};save();render();alert('복원 완료')}}catch{alert('올바른 백업 파일이 아닙니다.')}};r.readAsText(f);e.target.value=''}
+function resetAll(){if(confirm('모든 기록을 완전히 삭제할까요?')){localStorage.removeItem('ironDietV6');location.reload()}}
+function show(id,b){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');setTimeout(()=>{renderCalendar();drawAll()},30)}
+
+let configMode='weekday';
+let configDraft=[];
+
+function setConfigMode(mode){
+ configMode=mode;
+ document.getElementById('cfgWeekday').classList.toggle('active',mode==='weekday');
+ document.getElementById('cfgWeekend').classList.toggle('active',mode==='weekend');
+ configDraft=getMissions(mode).map(x=>({...x}));
+ renderMissionEditor();
+}
+function renderMissionEditor(){
+ const box=document.getElementById('missionEditor');
+ if(!box)return;
+ box.innerHTML=configDraft.map((m,i)=>`
+ <div class="editor-row">
+   <input value="${String(m.name||'').replace(/"/g,'&quot;')}" oninput="configDraft[${i}].name=this.value" placeholder="미션명">
+   <input type="number" value="${Number(m.reward||0)}" oninput="configDraft[${i}].reward=Number(this.value||0)" placeholder="적립금">
+   <button onclick="removeMissionRow(${i})">×</button>
+ </div>
+ <input style="width:100%;margin-top:5px;padding:9px;border-radius:9px;border:1px solid #30394a;background:#090d14;color:white" value="${String(m.desc||'').replace(/"/g,'&quot;')}" oninput="configDraft[${i}].desc=this.value" placeholder="설명">`).join('');
+}
+function addMissionRow(){configDraft.push({name:'새 미션',desc:'',reward:configMode==='weekday'?1000:1500});renderMissionEditor()}
+function removeMissionRow(i){
+ if(configDraft.length<=1)return alert('미션은 최소 1개가 필요합니다.');
+ configDraft.splice(i,1);renderMissionEditor();
+}
+function saveMissionConfig(){
+ if(configDraft.some(x=>!x.name.trim()))return alert('미션명을 입력해 주세요.');
+ state.config.missions[configMode]=configDraft.map(x=>({name:x.name.trim(),desc:(x.desc||'').trim(),reward:Math.max(0,Number(x.reward||0))}));
+ save();render();alert(`${configMode==='weekday'?'평일':'주말'} 미션 저장 완료`);
+}
+function saveGeneralConfig(){
+ const g=Math.max(1000,Number(document.getElementById('goalAmountInput').value||30000));
+ const h=(document.getElementById('headlineInput').value||'오늘도 이긴다').trim();
+ state.config.goal=g;state.config.headline=h;save();
+ document.querySelector('#mission h1').textContent=h;updateHeader();alert('기본 설정 저장 완료');
+}
+function initConfigEditor(){
+ const g=document.getElementById('goalAmountInput'),h=document.getElementById('headlineInput');
+ if(g)g.value=state.config.goal||30000;
+ if(h)h.value=state.config.headline||'오늘도 이긴다';
+ setConfigMode('weekday');
+}
+
+
+function lastNDays(n){
+ const arr=[];
+ for(let i=n-1;i>=0;i--){const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-i);arr.push({date:key(d),rate:rateFor(d)})}
+ return arr;
+}
+function updateJudges(){
+ const target=Number(state.config.targetRate||80);
+ const seven=lastNDays(7);
+ const active=seven.filter(x=>state.days[x.date]);
+ const avg=active.length?Math.round(active.reduce((a,b)=>a+b.rate,0)/active.length):0;
+ const perfect=active.filter(x=>x.rate===100).length;
+ const failed=active.filter(x=>x.rate<target).length;
+ const wj=document.getElementById('weeklyJudge');
+ document.getElementById('weeklyAvg').textContent=avg+'%';
+ document.getElementById('targetRateText').textContent=target+'%';
+ document.getElementById('perfectDaysText').textContent=perfect+'일';
+ document.getElementById('failedDaysText').textContent=failed+'일';
+ if(active.length===0){
+   wj.className='judge-card';document.getElementById('weeklyVerdict').textContent='기록 필요';
+   document.getElementById('weeklyMessage').textContent='미션을 체크하면 이번 주 판정이 시작됩니다.';
+ }else if(avg>=target){
+   wj.className='judge-card good';document.getElementById('weeklyVerdict').textContent='목표 달성';
+   document.getElementById('weeklyMessage').textContent=`평균 ${avg}%로 목표보다 ${avg-target}%p 높습니다. 좋은 흐름을 유지하고 있습니다.`;
+ }else{
+   wj.className='judge-card bad';document.getElementById('weeklyVerdict').textContent='목표 미달';
+   document.getElementById('weeklyMessage').textContent=`평균 ${avg}%로 목표보다 ${target-avg}%p 부족합니다. 남은 날은 최소 ${target}% 이상 달성해야 회복할 수 있습니다.`;
+ }
+
+ const entries=Object.entries(state.weights).sort();
+ const weightCard=document.getElementById('weightJudge');
+ document.getElementById('targetWeightText').textContent=Number(state.config.targetWeight||0).toFixed(1)+'kg';
+ const penalty=weightPenaltyAmount();
+ document.getElementById('penaltyText').textContent='-₩'+penalty.toLocaleString();
+ if(entries.length<2){
+   weightCard.className='judge-card';
+   document.getElementById('weightVerdict').textContent='기록 필요';
+   document.getElementById('weightMessage').textContent='체중을 2회 이상 기록하면 증가·감소 추세를 판정합니다.';
+   document.getElementById('weightChangeText').textContent='-';
+   document.getElementById('trendText').textContent='-';
+   return;
+ }
+ const first=Number(entries[0][1]),last=Number(entries.at(-1)[1]),change=last-first;
+ document.getElementById('weightChangeText').textContent=(change>0?'+':'')+change.toFixed(1)+'kg';
+ let trend=change;
+ if(entries.length>=4){
+   const latest=entries.slice(-2).map(x=>Number(x[1]));
+   const prior=entries.slice(-4,-2).map(x=>Number(x[1]));
+   trend=latest.reduce((a,b)=>a+b,0)/2-prior.reduce((a,b)=>a+b,0)/2;
+ }
+ document.getElementById('trendText').textContent=(trend>0?'↑ +':'↓ ')+Math.abs(trend).toFixed(1)+'kg';
+ if(trend>=Number(state.config.weightRiseThreshold||0.3)){
+   weightCard.className='judge-card bad';
+   document.getElementById('weightVerdict').textContent='체중 상승 경고';
+   document.getElementById('weightMessage').textContent=`최근 평균 체중이 ${trend.toFixed(1)}kg 상승했습니다. 주말 자금에서 ₩${penalty.toLocaleString()}이 차감됩니다.`;
+ }else if(trend<0){
+   weightCard.className='judge-card good';
+   document.getElementById('weightVerdict').textContent='감량 흐름';
+   document.getElementById('weightMessage').textContent=`최근 체중 흐름이 ${Math.abs(trend).toFixed(1)}kg 감소했습니다. 현재 방식을 유지하세요.`;
+ }else{
+   weightCard.className='judge-card';
+   document.getElementById('weightVerdict').textContent='정체 구간';
+   document.getElementById('weightMessage').textContent='큰 증감은 없습니다. 미션 달성률을 유지하며 3~4회 더 기록해 추세를 확인하세요.';
+ }
+}
+function saveJudgeConfig(){
+ state.config.targetRate=Math.max(10,Math.min(100,Number(document.getElementById('targetRateInput').value||80)));
+ state.config.targetWeight=Math.max(20,Math.min(300,Number(document.getElementById('targetWeightInput').value||120)));
+ state.config.weightRiseThreshold=Math.max(0.1,Number(document.getElementById('weightRiseThresholdInput').value||0.3));
+ state.config.weightPenalty=Math.max(0,Number(document.getElementById('weightPenaltyInput').value||1000));
+ state.config.penaltyEnabled=document.getElementById('penaltyEnabledInput').checked;
+ save();updateHeader();drawAll();alert('판정 규칙 저장 완료');
+}
+function initJudgeConfig(){
+ const map={
+  targetRateInput:state.config.targetRate,
+  targetWeightInput:state.config.targetWeight,
+  weightRiseThresholdInput:state.config.weightRiseThreshold,
+  weightPenaltyInput:state.config.weightPenalty
+ };
+ Object.entries(map).forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.value=v});
+ const pe=document.getElementById('penaltyEnabledInput');if(pe)pe.checked=!!state.config.penaltyEnabled;
+}
+
+initJudgeConfig();
+
+function migrateProteinMission(){
+ try{
+   ['weekday','weekend'].forEach(mode=>{
+     const arr=state.config?.missions?.[mode];
+     if(!Array.isArray(arr))return;
+     arr.forEach(m=>{
+       if(m && (m.name==='아침 계란 2알'||m.name==='계란 2알')){
+         m.name='아침 단백질 섭취';
+         m.desc=mode==='weekday'?'아침 단백질 섭취로 하루 시작':'주말에도 아침 단백질 섭취';
+       }
+     });
+   });
+   save();
+ }catch(e){}
+}
+
+migrateProteinMission();
+initConfigEditor();
+document.querySelector('#mission h1').textContent=state.config.headline||'오늘도 이긴다';document.getElementById('dateText').textContent=new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'long',day:'numeric',weekday:'long'}).format(new Date());setChartRange('all');
+render();
+</script>
+
+<script>
+let deferredInstallPrompt=null;
+let waitingWorker=null;
+
+window.addEventListener('beforeinstallprompt',e=>{
+ e.preventDefault();
+ deferredInstallPrompt=e;
+ const b=document.getElementById('installBtn');
+ if(b){b.disabled=false;b.textContent='IRON DIET 설치';}
+});
+
+window.addEventListener('appinstalled',()=>{
+ const b=document.getElementById('installBtn');
+ if(b)b.textContent='설치 완료';
+ deferredInstallPrompt=null;
+});
+
+async function installApp(){
+ if(deferredInstallPrompt){
+   deferredInstallPrompt.prompt();
+   await deferredInstallPrompt.userChoice;
+   deferredInstallPrompt=null;
+ }else{
+   alert('Chrome 메뉴의 “설치 및 바로가기 만들기” 또는 “앱 설치”를 눌러주세요.');
+ }
+}
+
+function showUpdate(reg){
+ if(reg.waiting){
+   waitingWorker=reg.waiting;
+   document.getElementById('updateBanner')?.classList.add('show');
+ }
+}
+
+function applyUpdate(){
+ if(waitingWorker) waitingWorker.postMessage({type:'SKIP_WAITING'});
+}
+
+if('serviceWorker' in navigator){
+ window.addEventListener('load',async()=>{
+   try{
+     const reg=await navigator.serviceWorker.register('./sw.js');
+     showUpdate(reg);
+     reg.addEventListener('updatefound',()=>{
+       const nw=reg.installing;
+       if(!nw)return;
+       nw.addEventListener('statechange',()=>{
+         if(nw.state==='installed' && navigator.serviceWorker.controller){
+           waitingWorker=nw;
+           document.getElementById('updateBanner')?.classList.add('show');
+         }
+       });
+     });
+     setInterval(()=>reg.update(),60*60*1000);
+   }catch(e){console.error('SW registration failed',e);}
+ });
+ navigator.serviceWorker.addEventListener('controllerchange',()=>location.reload());
+}
+</script>
+
+</body></html>
