@@ -1,4 +1,4 @@
-const CACHE='iron-diet-pwa-v16';
+const CACHE='iron-diet-pwa-v17';
 const CORE=['./','./index.html','./manifest.webmanifest','./icon.svg','./icon-192.png','./icon-512.png'];
 
 self.addEventListener('install',event=>{
