@@ -328,7 +328,7 @@ const DEFAULT_WD=[
  {name:'아침 단백질 섭취',desc:'아침 단백질 섭취로 하루 시작',reward:1000},
  {name:'오전 10시 아이스아메리카노',desc:'군것질 대신 깔끔하게',reward:1000},
  {name:'점심 자유식 + 밥 반 공기',desc:'먹되 양은 통제',reward:1000},
- {name:'점심 후 30분 서서 일하기',desc:'식후 활동 미션',reward:1000},
+ {name:'점심먹고 15분 걷기',desc:'식후 15분 걷기',reward:1000},
  {name:'저녁 샐러드 + 닭가슴살',desc:'저녁 방어 성공',reward:1000},
  {name:'마루 산책',desc:'오늘의 마지막 승리',reward:1000}
 ];
@@ -1037,6 +1037,25 @@ function migrateProteinMission(){
 }
 
 migrateProteinMission();
+
+function migrateLunchWalkMission(){
+ try{
+   ['weekday','weekend'].forEach(mode=>{
+     const arr=state.config?.missions?.[mode];
+     if(!Array.isArray(arr))return;
+     arr.forEach(m=>{
+       if(!m)return;
+       if(m.name==='점심 후 30분 서서 일하기'||m.name==='점심후 30분 서서 일하기'){
+         m.name='점심먹고 15분 걷기';
+         m.desc='식후 15분 걷기';
+       }
+     });
+   });
+   save();
+ }catch(e){}
+}
+
+migrateLunchWalkMission();
 initConfigEditor();
 document.querySelector('#mission h1').textContent=state.config.headline||'오늘도 이긴다';document.getElementById('dateText').textContent=new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'long',day:'numeric',weekday:'long'}).format(new Date());setChartRange('all');
 render();
